@@ -27,7 +27,9 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "no-var": "error",
+        "@typescript-eslint/no-explicit-any": "error"
       }
     },
     {
