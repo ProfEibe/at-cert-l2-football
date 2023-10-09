@@ -1,9 +1,7 @@
+import { Team } from '../team';
+
 export interface Standing {
-  team: {
-    id: number;
-    name: string;
-    logo: string;
-  };
+  team: Team;
   all: {
     played: number;
     win: number;

@@ -4,14 +4,14 @@ import { map, Observable, of, tap } from 'rxjs';
 import { ApiResponse } from '../response';
 import { Fixture } from './fixture';
 
+type localFixture = { value: Fixture[]; timestamp: number };
+
 @Injectable({
   providedIn: 'root',
 })
 export class ResultsService {
   private http = inject(HttpClient);
   private api = `https://v3.football.api-sports.io`;
-
-  constructor() {}
 
   getLast10Fixtures(leagueId: string, teamId: string): Observable<Fixture[]> {
     let headers = new HttpHeaders().set(
@@ -22,7 +22,7 @@ export class ResultsService {
 
     const loc = localStorage.getItem(`fixtures-team-${teamId}`);
     if (loc) {
-      const fix: { value: Fixture[]; timestamp: number } = JSON.parse(loc);
+      const fix: localFixture = JSON.parse(loc);
       if (this.isLessThanXHoursAgo(fix.timestamp, 24)) {
         console.info('fixture-data from localstorage');
         return of(fix.value);
@@ -48,7 +48,7 @@ export class ResultsService {
       );
   }
 
-  private isLessThanXHoursAgo(timestamp: number, hours: number) {
+  private isLessThanXHoursAgo(timestamp: number, hours: number): boolean {
     return new Date(timestamp).getTime() > Date.now() - hours * 60 * 60 * 1000;
   }
 }

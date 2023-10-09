@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { concatMap, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Standing } from './standing';
 import { ApiResponse } from '../response';
 
@@ -35,7 +35,7 @@ export class LeagueService {
 
   getStandings(leagueId: string): Observable<Standing[]> {
     return this.getCurrentSeason(leagueId).pipe(
-      switchMap((season) => this.getCurrentStanding(leagueId, season)),
+      concatMap((season) => this.getCurrentStanding(leagueId, season)),
     );
   }
 

@@ -1,7 +1,4 @@
-interface Team {
-  name: string;
-  logo: string;
-}
+import { Team } from '../team';
 
 export interface Fixture {
   goals: {
