@@ -1,0 +1,14 @@
+<div *ngFor="let fixture of fixtures" class="mb-5 grid">
+  <div class="col flex align-items-center justify-content-end">
+    <img [src]="fixture.teams.home.logo" alt="hometeam" style="width: 30px" />
+    {{ fixture.teams.home.name }}
+  </div>
+  <div class="col-1 text-center flex align-items-center justify-content-center">
+    {{ fixture.goals.home }} - {{ fixture.goals.away }}
+  </div>
+  <div class="col flex align-items-center justify-content-start">
+    {{ fixture.teams.away.name }}
+    <img [src]="fixture.teams.away.logo" alt="awayteam" style="width: 30px" />
+  </div>
+</div>
+<p-button [routerLink]="['..']">Back</p-button>

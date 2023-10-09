@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LeagueService } from './league.service';
 import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-league',
   standalone: true,
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, RouterLink],
   templateUrl: './league.component.html',
   styleUrls: ['./league.component.css'],
 })
