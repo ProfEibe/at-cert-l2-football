@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LeagueService } from './league.service';
 import { TableModule } from 'primeng/table';
+import { Standing } from './standing';
 
 @Component({
   selector: 'app-league',
@@ -13,17 +14,16 @@ import { TableModule } from 'primeng/table';
 })
 export class LeagueComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private service = inject(LeagueService);
+  private leagueService = inject(LeagueService);
 
-  standings = [];
+  standings: Standing[] = [];
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      if (!id) return;
-      console.log(params.get('id'));
-      this.service.getStanding(id).subscribe((standings) => {
-        this.standings = standings.response[0].league.standings[0];
+      const leagueId = params.get('id');
+      if (!leagueId) return;
+      this.leagueService.getStandings(leagueId).subscribe((standings) => {
+        this.standings = standings;
       });
     });
   }

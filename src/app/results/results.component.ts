@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
 })
 export class ResultsComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private service = inject(ResultsService);
+  private resultsService = inject(ResultsService);
 
   fixtures: any[] = []; // todo: böse!!
 
@@ -23,10 +23,12 @@ export class ResultsComponent implements OnInit {
       const league = params.get('id');
       if (!id || !league) return;
       console.log(params.get('team'));
-      this.service.getLast10Fixtures(league, id).subscribe((fixtures) => {
-        console.log(fixtures);
-        this.fixtures = fixtures.response;
-      });
+      this.resultsService
+        .getLast10Fixtures(league, id)
+        .subscribe((fixtures) => {
+          console.log(fixtures);
+          this.fixtures = fixtures.response;
+        });
     });
   }
 }
