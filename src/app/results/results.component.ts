@@ -22,12 +22,10 @@ export class ResultsComponent implements OnInit {
       const id = params.get('team');
       const league = params.get('id');
       if (!id || !league) return;
-      console.log(params.get('team'));
       this.resultsService
         .getLast10Fixtures(league, id)
-        .subscribe((fixtures) => {
-          console.log(fixtures);
-          this.fixtures = fixtures.response;
+        .subscribe((fixtures: any[]) => {
+          this.fixtures = fixtures;
         });
     });
   }
