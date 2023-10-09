@@ -10,6 +10,10 @@ interface StandingResponse {
   };
 }
 
+type LeagueSeasons = { seasons: { year: string }[] };
+type localStandings = { value: Standing[]; timestamp: number };
+type localSeasons = { value: string; timestamp: number };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -39,7 +43,7 @@ export class LeagueService {
     // try to fetch current season from local storage if it is newer than 24h
     const locSeason = localStorage.getItem(`current-season-${leagueId}`);
     if (locSeason) {
-      const cs: { value: string; timestamp: number } = JSON.parse(locSeason);
+      const cs: localSeasons = JSON.parse(locSeason);
       if (this.isLessThanXHoursAgo(cs.timestamp, 24)) {
         console.info('season-data from localstorage');
         return of(cs.value);
@@ -48,12 +52,12 @@ export class LeagueService {
 
     // else fetch current season from API
     return this.http
-      .get<ApiResponse<any[]>>(
+      .get<ApiResponse<LeagueSeasons[]>>(
         `${this.api}/leagues?id=${leagueId}&current=true`,
         { headers: this.headers },
       )
       .pipe(
-        map((res: ApiResponse<any[]>) => {
+        map((res: ApiResponse<LeagueSeasons[]>) => {
           console.log(res);
           return res.response[0].seasons[0].year.toString();
         }),
@@ -70,7 +74,7 @@ export class LeagueService {
     // try to fetch standings from local storage if they are newer than 24h
     const loc = localStorage.getItem(`standings-${leagueId}-${season}`);
     if (loc) {
-      const cl: { value: Standing[]; timestamp: number } = JSON.parse(loc);
+      const cl: localStandings = JSON.parse(loc);
       if (this.isLessThanXHoursAgo(cl.timestamp, 24)) {
         console.info('league-data from localstorage');
         return of(cl.value);

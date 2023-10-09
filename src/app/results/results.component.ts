@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ResultsService } from './results.service';
 import { ButtonModule } from 'primeng/button';
+import { Fixture } from './fixture';
 
 @Component({
   selector: 'app-results',
@@ -15,7 +16,7 @@ export class ResultsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private resultsService = inject(ResultsService);
 
-  fixtures: any[] = []; // todo: böse!!
+  fixtures: Fixture[] = [];
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -24,7 +25,7 @@ export class ResultsComponent implements OnInit {
       if (!id || !league) return;
       this.resultsService
         .getLast10Fixtures(league, id)
-        .subscribe((fixtures: any[]) => {
+        .subscribe((fixtures) => {
           this.fixtures = fixtures;
         });
     });

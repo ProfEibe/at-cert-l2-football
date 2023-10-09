@@ -1,18 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, of, tap } from 'rxjs';
-import { Standing } from '../league/standing';
+import { map, Observable, of, tap } from 'rxjs';
 import { ApiResponse } from '../response';
+import { Fixture } from './fixture';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResultsService {
   private http = inject(HttpClient);
+  private api = `https://v3.football.api-sports.io`;
 
   constructor() {}
 
-  getLast10Fixtures(leagueId: string, teamId: string) {
+  getLast10Fixtures(leagueId: string, teamId: string): Observable<Fixture[]> {
     let headers = new HttpHeaders().set(
       'x-rapidapi-key',
       '359203fe2df2a42085dee19dbe500d21',
@@ -21,7 +22,7 @@ export class ResultsService {
 
     const loc = localStorage.getItem(`fixtures-team-${teamId}`);
     if (loc) {
-      const fix: { value: any[]; timestamp: number } = JSON.parse(loc);
+      const fix: { value: Fixture[]; timestamp: number } = JSON.parse(loc);
       if (this.isLessThanXHoursAgo(fix.timestamp, 24)) {
         console.info('fixture-data from localstorage');
         return of(fix.value);
@@ -29,8 +30,8 @@ export class ResultsService {
     }
 
     return this.http
-      .get<ApiResponse<any[]>>(
-        `https://v3.football.api-sports.io/fixtures?league=${leagueId}&season=2023&team=${teamId}&last=10`,
+      .get<ApiResponse<Fixture[]>>(
+        `${this.api}/fixtures?league=${leagueId}&season=2023&team=${teamId}&last=10`,
         { headers },
       )
       .pipe(
